@@ -1,8 +1,7 @@
 import nltk
-from nltk.stem import PorterStemmer
-from nltk.corpus import stopwords
 
-#Stopwords : Why using -> of, from , the, our, of them , are repetitive words that do not add much meaning to the text.
+from nltk.stem import WordNetLemmatizer
+from nltk.corpus import stopwords
 
 
 paragraph = """I have three visions for India.
@@ -60,16 +59,18 @@ We are the second largest producer of rice.
 We have achieved self-sufficiency in many areas, yet we still lack confidence.
 Instead of being proud of our achievements, we indulge in self-criticism."""
 
-
-
 sentences = nltk.sent_tokenize(paragraph)
-stemmer = PorterStemmer() # Initialize the stemmer
+lemmatizer = WordNetLemmatizer()
 
-#Stemming
+# Tokenize and lemmatize each sentence
+# Remove stopwords and non-alphabetic tokens
+
+#Lemmetization
+
 for i in range(len(sentences)):
-    words = nltk.word_tokenize(sentences[i])# Tokenize each sentence into words
-
-    words = [stemmer.stem(word) for word in words if word not in set(stopwords.words('english'))]
+    words = nltk.word_tokenize(sentences[i])
+    words = [lemmatizer.lemmatize(word) for word in words if word not in set(stopwords.words('english')) ]
     sentences[i] = ' '.join(words)
-    print(f" {i+1}: {sentences[i]}")
+    print(f"{i+1} {sentences[i]}")
 
+# Print the lemmatized sentences

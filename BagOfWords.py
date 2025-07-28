@@ -1,8 +1,4 @@
 import nltk
-from nltk.stem import PorterStemmer
-from nltk.corpus import stopwords
-
-#Stopwords : Why using -> of, from , the, our, of them , are repetitive words that do not add much meaning to the text.
 
 
 paragraph = """I have three visions for India.
@@ -61,15 +57,41 @@ We have achieved self-sufficiency in many areas, yet we still lack confidence.
 Instead of being proud of our achievements, we indulge in self-criticism."""
 
 
+#Cleaning the text
 
+###
+### Cleaning the text means removing unwanted characters, converting to lowercase, removing stopwords, stemming or lemmatizing words, etc.
+###
+
+import re # this is used for regular expressions
+from nltk.corpus import stopwords
+from nltk.stem.porter import PorterStemmer
+from nltk.stem import WordNetLemmatizer
+
+
+ps = PorterStemmer() #for stemming
+wordnet = WordNetLemmatizer()
 sentences = nltk.sent_tokenize(paragraph)
-stemmer = PorterStemmer() # Initialize the stemmer
+corpus = [] # list to hold the cleaned sentences
 
-#Stemming
 for i in range(len(sentences)):
-    words = nltk.word_tokenize(sentences[i])# Tokenize each sentence into words
+    review = re.sub('[^a-zA-Z]', ' ', sentences[i])
+    review = review.lower()
+    review = review.split()
+    review = [ps.stem(word) for word in review if not word in set(stopwords.words('english'))]
+    review = ' '.join(review)
+    corpus.append(review)
+    
 
-    words = [stemmer.stem(word) for word in words if word not in set(stopwords.words('english'))]
-    sentences[i] = ' '.join(words)
-    print(f" {i+1}: {sentences[i]}")
-
+#Creating the bag of words model (Document metrix all together)
+from sklearn.feature_extraction.text import CountVectorizer #for this install scikit-learn
+cv = CountVectorizer(max_features=1500)
+X = cv.fit_transform(corpus).toarray()  # Create the bag of words model
+print(X)
+#converted into document matrix
+#UseCases of bow:
+#1. Text Classification
+#2. Sentiment Analysis
+#3. Topic Modeling
+#4. Information Retrieval
+#5. Document Clustering
