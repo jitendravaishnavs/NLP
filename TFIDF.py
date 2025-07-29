@@ -75,7 +75,7 @@ for i in range(len(sentences)):
     review = ' '.join(review)
     corpus.append(review)
 #Creating the tf-idf model (Document matrix all together)
-from sklearn.feature_extraction.text import TfidfVectorizer  # for this install scikit-learn
+from sklearn.feature_extraction.text import TfidfVectorizer  # TF-IDF Vectorization
 cv = TfidfVectorizer(max_features=1500)
 X = cv.fit_transform(corpus).toarray()  # Create the tf-idf model
 print(X)
